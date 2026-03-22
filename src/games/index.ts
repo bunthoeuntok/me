@@ -5,7 +5,7 @@ export function createGame(parent: HTMLElement): Phaser.Game {
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent,
-    backgroundColor: "#000",
+    backgroundColor: "#05050f",
     scene: [BootScene],
     scale: {
       mode: Phaser.Scale.RESIZE,
