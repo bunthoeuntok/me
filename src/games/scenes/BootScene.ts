@@ -30,7 +30,7 @@ export class BootScene extends Phaser.Scene {
       .setAlpha(0);
 
     this.subtitleText = this.add
-      .text(width / 2, height * 0.48, "Full-Stack Developer", {
+      .text(width / 2, height * 0.45, "Full-Stack Developer", {
         fontSize: "22px",
         color: "#8ec8f7",
         fontFamily: "Inter, sans-serif",
@@ -55,7 +55,8 @@ export class BootScene extends Phaser.Scene {
     });
 
     this.spiderman = new Spiderman(this);
-    this.spiderman.playWarmup(120);
+    this.spiderman.playWarmup();
+    this.spiderman.say("Your friendly neighborhood Spider-Man!");
   }
 
   update(_time: number, delta: number): void {

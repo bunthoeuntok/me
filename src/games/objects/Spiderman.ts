@@ -4,12 +4,15 @@ const SCALE = 0.3;
 const FRAME_RATE = 12;
 const SPEED = 100;
 
+// Actual character body half-size within the frame (excluding transparent padding)
+const BODY_HW = 30;
+const BODY_HH = 50;
+
 const ANIMS = {
   warmup: { start: 0, end: 34, repeat: -1 },
   run: { start: 35, end: 58, repeat: -1 },
   jump: { start: 59, end: 80, repeat: 0 },
   land: { start: 65, end: 80, repeat: 0 },
-  wallAttach: { start: 81, end: 101, repeat: 0 },
   wallCrawl: { start: 102, end: 124, repeat: 0 },
 } as const;
 
@@ -23,7 +26,10 @@ export class Spiderman {
     down: Phaser.Input.Keyboard.Key;
     left: Phaser.Input.Keyboard.Key;
     right: Phaser.Input.Keyboard.Key;
+    interact: Phaser.Input.Keyboard.Key;
   };
+  private tooltip: Phaser.GameObjects.Text | null = null;
+  private sayMessage: string = "";
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -40,6 +46,7 @@ export class Spiderman {
       down: kb.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       left: kb.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       right: kb.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      interact: kb.addKey(Phaser.Input.Keyboard.KeyCodes.I),
     };
 
     this.registerAnims();
@@ -48,31 +55,34 @@ export class Spiderman {
   update(delta: number): void {
     const speed = (SPEED * delta) / 1000;
     let dx = 0;
-    let dy = 0;
+    const dy = 0;
 
     if (this.keys.left.isDown) dx -= speed;
     if (this.keys.right.isDown) dx += speed;
-    if (this.keys.down.isDown) dy += speed;
 
     const { width, height } = this.scene.scale;
-    const hw = this.sprite.displayWidth / 2;
-    const hh = this.sprite.displayHeight / 2;
 
-    this.sprite.x = Phaser.Math.Clamp(this.sprite.x + dx, hw, width - hw);
-    this.sprite.y = Phaser.Math.Clamp(this.sprite.y + dy, hh, height - hh);
+    this.sprite.x = Phaser.Math.Clamp(
+      this.sprite.x + dx,
+      BODY_HW,
+      width - BODY_HW,
+    );
+    this.sprite.y = Phaser.Math.Clamp(
+      this.sprite.y + dy,
+      BODY_HH,
+      height - BODY_HH,
+    );
+
+    if (Phaser.Input.Keyboard.JustDown(this.keys.interact)) {
+      this.showTooltip();
+    }
+
+    this.syncTooltip();
 
     const currentAnim = this.sprite.anims.currentAnim?.key;
 
-    if (
-      Phaser.Input.Keyboard.JustUp(this.keys.up) &&
-      currentAnim === "wallCrawl"
-    ) {
-      this.playLand();
-      return;
-    }
-
     if (this.keys.up.isDown) {
-      if (currentAnim !== "wallCrawl") this.sprite.play("wallCrawl");
+      if (currentAnim !== "wallCrawl") this.playWallCrawl();
     } else if (this.keys.down.isDown) {
       if (currentAnim !== "jump") this.sprite.play("jump");
     } else if (dx < 0) {
@@ -108,9 +118,9 @@ export class Spiderman {
     });
   }
 
-  playWarmup(x?: number): void {
+  playWarmup(): void {
     const { height } = this.scene.scale;
-    this.sprite.setPosition(x ?? this.sprite.x, height);
+    this.sprite.setPosition(0, height - 75);
     this.sprite.setFlipX(false);
     this.sprite.play("warmup");
   }
@@ -148,14 +158,9 @@ export class Spiderman {
     });
   }
 
-  playWallAttach(): void {
-    this.sprite.play("wallAttach");
-  }
-
   playWallCrawl(): void {
     const { height } = this.scene.scale;
-    const topY = height * 0.08;
-
+    const topY = height - 75;
     this.sprite.play("wallCrawl");
 
     this.scene.tweens.add({
@@ -163,23 +168,49 @@ export class Spiderman {
       y: topY,
       duration: 2000,
       ease: "Linear",
-      onComplete: () => {
-        this.playWarmup(this.sprite.x);
-      },
     });
   }
 
   playLand(): void {
     const { height } = this.scene.scale;
-    const groundY = height;
 
     this.sprite.play("land");
-
     this.scene.tweens.add({
       targets: this.sprite,
-      y: groundY,
-      duration: 600,
+      y: height,
+      duration: 6000,
       ease: "Linear",
     });
+  }
+
+  say(message: string): void {
+    this.sayMessage = message;
+  }
+
+  private showTooltip(): void {
+    if (!this.sayMessage) return;
+
+    if (this.tooltip) {
+      this.tooltip.destroy();
+      this.tooltip = null;
+      return;
+    }
+
+    this.tooltip = this.scene.add.text(0, 0, this.sayMessage, {
+      fontSize: "12px",
+      color: "#ffffff",
+      backgroundColor: "#000000cc",
+      padding: { x: 8, y: 6 },
+    });
+    this.tooltip.setDepth(10);
+    this.syncTooltip();
+  }
+
+  private syncTooltip(): void {
+    if (!this.tooltip) return;
+    this.tooltip.setPosition(
+      this.sprite.x - this.tooltip.width / 2,
+      this.sprite.y - this.sprite.displayHeight / 2 - this.tooltip.height + 40,
+    );
   }
 }
