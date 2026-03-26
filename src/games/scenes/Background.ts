@@ -2,11 +2,31 @@ import Phaser from "phaser";
 import { Buildings } from "../objects/Buildings";
 import { Road } from "../objects/Road";
 import { Car } from "../objects/Car";
-import { ROAD_H } from "../constants";
+import { ROAD_H, COMIC_NIGHT } from "../constants";
 
 export class Background {
   constructor(scene: Phaser.Scene) {
     const { width, height } = scene.scale;
+
+    // --- Sky ---
+    const skyH = height - ROAD_H;
+    const gfxSky = scene.add.graphics();
+    gfxSky.fillStyle(COMIC_NIGHT);
+    gfxSky.fillRect(0, 0, width, skyH);
+
+    // Halftone dot overlay
+    const dotKey = 'halftone-dot';
+    if (!scene.textures.exists(dotKey)) {
+      const canvas = scene.textures.createCanvas(dotKey, 6, 6)!;
+      const ctx = canvas.getContext();
+      ctx.clearRect(0, 0, 6, 6);
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.beginPath();
+      ctx.arc(3, 3, 1, 0, Math.PI * 2);
+      ctx.fill();
+      canvas.refresh();
+    }
+    scene.add.tileSprite(0, 0, width, skyH, dotKey).setOrigin(0, 0);
 
     new Buildings(scene);
     new Road(scene);
