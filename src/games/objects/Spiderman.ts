@@ -7,6 +7,12 @@ const SPEED = 500;
 // Actual character body half-size within the frame (excluding transparent padding)
 const BODY_HW = 30;
 
+// Measured from spritesheet pixel data:
+//   warmup frame 0  → character center X at +(-3)px on screen
+//   wallCrawl last frame → character center X at +(173)px on screen
+// Total shift the character visually travels across the full animation = 176px.
+const WALL_CRAWL_X_SHIFT = 300;
+
 const ANIMS = {
   warmup: { start: 0, end: 34, repeat: -1 },
   run: { start: 35, end: 58, repeat: -1 },
@@ -33,6 +39,7 @@ export class Spiderman {
   private rightEdgeFired = false;
   private onLeftEdgeCb?: () => void;
   private leftEdgeFired = false;
+  private wallCrawlActive = false;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -97,17 +104,31 @@ export class Spiderman {
     const currentAnim = this.sprite.anims.currentAnim?.key;
 
     if (this.keys.up.isDown) {
-      if (currentAnim !== "wallCrawl") this.playWallCrawl();
-    } else if (this.keys.down.isDown) {
-      if (currentAnim !== "jump") this.sprite.play("jump");
-    } else if (dx < 0) {
-      this.sprite.setFlipX(true);
-      if (currentAnim !== "run") this.sprite.play("run");
-    } else if (dx > 0) {
-      this.sprite.setFlipX(false);
-      if (currentAnim !== "run") this.sprite.play("run");
+      if (!this.wallCrawlActive) this.playWallCrawl();
     } else {
-      if (currentAnim !== "warmup") this.sprite.play("warmup");
+      if (this.wallCrawlActive) {
+        // Apply X correction proportional to how far through the animation we are,
+        // so sprite.x lands exactly where the character visually appears to be.
+        const progress =
+          this.sprite.anims.getProgress() > 0.6
+            ? 0.6
+            : this.sprite.anims.getProgress();
+        const dir = this.sprite.flipX ? -1 : 1;
+        this.sprite.x += dir * Math.round(WALL_CRAWL_X_SHIFT * progress);
+        this.wallCrawlActive = false;
+      }
+
+      if (this.keys.down.isDown) {
+        if (currentAnim !== "jump") this.sprite.play("jump");
+      } else if (dx < 0) {
+        this.sprite.setFlipX(true);
+        if (currentAnim !== "run") this.sprite.play("run");
+      } else if (dx > 0) {
+        this.sprite.setFlipX(false);
+        if (currentAnim !== "run") this.sprite.play("run");
+      } else {
+        if (currentAnim !== "warmup") this.sprite.play("warmup");
+      }
     }
   }
 
@@ -142,16 +163,8 @@ export class Spiderman {
   }
 
   private playWallCrawl(): void {
-    const { height } = this.scene.scale;
-    const topY = height * 0.2;
+    this.wallCrawlActive = true;
     this.sprite.play("wallCrawl");
-
-    this.scene.tweens.add({
-      targets: this.sprite,
-      y: topY,
-      duration: 2000,
-      ease: "Linear",
-    });
   }
 
   say(message: string): void {
