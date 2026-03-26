@@ -1,14 +1,11 @@
 import Phaser from "phaser";
 import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
+import { ComicUI } from "../ui/ComicUI";
+import { COMIC_BLUE, COMIC_BLACK, COMIC_WHITE, CSS_RED, CSS_BLUE } from "../constants";
 
-const ABOUT = {
-  name: "Bunthoeun Tok",
-  role: "Full-Stack Developer",
-  bio: "Passionate developer crafting web experiences\nwith modern technologies and creative flair.",
-  skills: ["TypeScript", "React", "Node.js", "Phaser", "PostgreSQL", "Docker"],
-  contact: "✉  bunthoeuntok@gmail.com",
-};
+const BIO    = "Passionate developer crafting web experiences\nwith modern technologies and creative flair.";
+const SKILLS = ["TypeScript", "React", "Node.js", "Phaser", "PostgreSQL", "Docker"];
 
 export class AboutMeScene extends Phaser.Scene {
   private spiderman!: Spiderman;
@@ -24,103 +21,109 @@ export class AboutMeScene extends Phaser.Scene {
   create(): void {
     new Background(this);
 
-    const { width, height } = this.scale;
-
-    // Fade in from black
     this.cameras.main.fadeIn(600, 0, 0, 0);
 
-    const nameText = this.add
-      .text(width / 2, height * 0.18, ABOUT.name, {
-        fontSize: "28px",
-        color: "#ffffff",
-        fontFamily: "Orbitron, sans-serif",
-        fontStyle: "bold",
-      })
-      .setOrigin(0.5)
-      .setAlpha(0);
+    const { width, height } = this.scale;
 
-    const roleText = this.add
-      .text(width / 2, height * 0.27, ABOUT.role, {
-        fontSize: "15px",
-        color: "#3a7bd5",
-        fontFamily: "Inter, sans-serif",
-      })
-      .setOrigin(0.5)
-      .setAlpha(0);
+    ComicUI.captionBar(this, COMIC_BLUE, "About Me", "The Origin Story", "#ffffff");
+    ComicUI.infoStrip(this, "← A  /  D →  |  I: Interact");
 
-    const bioText = this.add
-      .text(width / 2, height * 0.37, ABOUT.bio, {
-        fontSize: "13px",
-        color: "#c0cce0",
-        fontFamily: "Inter, sans-serif",
-        align: "center",
-        lineSpacing: 6,
-      })
-      .setOrigin(0.5)
-      .setAlpha(0);
+    // --- Bio card ---
+    const cardX = width * 0.08;
+    const cardY = height * 0.13;
+    const cardW = width * 0.56;
+    const cardH = height * 0.72;
+    const gfx = this.add.graphics();
 
-    // Skills
-    const skillsLabel = this.add
-      .text(width / 2, height * 0.49, "SKILLS", {
-        fontSize: "11px",
-        color: "#3a7bd5",
-        fontFamily: "Orbitron, sans-serif",
+    gfx.fillStyle(COMIC_WHITE, 1);
+    gfx.fillRoundedRect(cardX, cardY, cardW, cardH, 8);
+    gfx.lineStyle(3, COMIC_BLACK, 1);
+    gfx.strokeRoundedRect(cardX, cardY, cardW, cardH, 8);
+    gfx.setDepth(5);
+
+    // BIO label
+    this.add
+      .text(cardX + 16, cardY + 14, "BIO", {
+        fontFamily: "Impact, Arial Black, sans-serif",
+        fontSize: "14px",
+        color: CSS_RED,
         letterSpacing: 3,
       })
-      .setOrigin(0.5)
-      .setAlpha(0);
+      .setDepth(6);
 
-    const skillChips: Phaser.GameObjects.Text[] = [];
-    const chipsPerRow = 3;
-    const chipW = width / chipsPerRow - 10;
-    ABOUT.skills.forEach((skill, i) => {
-      const col = i % chipsPerRow;
-      const row = Math.floor(i / chipsPerRow);
-      const cx = width * 0.3 + col * (chipW + 8) + chipW / 2;
-      const cy = height * 0.56 + row * 34;
-      const chip = this.add
-        .text(cx, cy, skill, {
-          fontSize: "12px",
-          color: "#8ec8f7",
-          fontFamily: "Inter, sans-serif",
-          backgroundColor: "#1a2a4a",
-          padding: { x: 10, y: 5 },
-        })
-        .setOrigin(0.5)
-        .setAlpha(0);
-      skillChips.push(chip);
-    });
-
-    const contactText = this.add
-      .text(width / 2, height * 0.75, ABOUT.contact, {
+    // Bio text
+    this.add
+      .text(cardX + 16, cardY + 36, BIO, {
+        fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
         fontSize: "13px",
-        color: "#c0cce0",
-        fontFamily: "Inter, sans-serif",
+        color: "#222222",
+        wordWrap: { width: cardW - 32 },
+        lineSpacing: 4,
       })
-      .setOrigin(0.5)
-      .setAlpha(0);
+      .setDepth(6);
 
-    // --- Animate card elements in sequence ---
-    const delay = (n: number) => 300 + n * 120;
-    const fadeIn = (obj: Phaser.GameObjects.GameObject, d: number) => {
-      this.tweens.add({ targets: obj, alpha: 1, duration: 400, delay: d });
+    // SKILLS label
+    this.add
+      .text(cardX + 16, cardY + 108, "SKILLS", {
+        fontFamily: "Impact, Arial Black, sans-serif",
+        fontSize: "14px",
+        color: CSS_BLUE,
+        letterSpacing: 3,
+      })
+      .setDepth(6);
+
+    // Skill chips
+    const chipPadX   = 10;
+    const chipPadY   = 5;
+    const chipGap    = 8;
+    const chipsPerRow = 3;
+    const chipFont = {
+      fontFamily: "Impact, Arial Black, sans-serif",
+      fontSize: "12px",
+      color: "#ffffff",
+      letterSpacing: 1,
     };
 
-    fadeIn(nameText, delay(0));
-    fadeIn(roleText, delay(1));
-    fadeIn(bioText, delay(3));
-    fadeIn(skillsLabel, delay(4));
-    skillChips.forEach((chip, i) => fadeIn(chip, delay(5 + i)));
-    fadeIn(contactText, delay(6 + skillChips.length));
+    SKILLS.forEach((skill, i) => {
+      const col = i % chipsPerRow;
+      const row = Math.floor(i / chipsPerRow);
 
-    // --- Spiderman walks in from left ---
+      const labelObj = this.add.text(0, 0, skill, chipFont).setVisible(false);
+      const cw = labelObj.width + chipPadX * 2;
+      const ch = labelObj.height + chipPadY * 2;
+      labelObj.destroy();
+
+      const colW = (cardW - 32) / chipsPerRow;
+      const cx   = cardX + 16 + col * colW;
+      const cy   = cardY + 136 + row * (ch + chipGap);
+
+      const cg = this.add.graphics().setDepth(6);
+      cg.fillStyle(0x003B8E, 1);
+      cg.fillRect(cx, cy, cw, ch);
+      cg.lineStyle(2.5, COMIC_BLACK, 1);
+      cg.strokeRect(cx, cy, cw, ch);
+
+      this.add
+        .text(cx + chipPadX, cy + chipPadY, skill, chipFont)
+        .setDepth(7);
+    });
+
+    // --- Spiderman ---
     this.spiderman = new Spiderman(this);
-    this.spiderman.say("Check out my work! Press I");
-    this.spiderman.playWarmup(width * 0.15);
+    this.spiderman.say("Press I to interact!");
+    this.spiderman.playWarmup(width * 0.78);
+
     this.spiderman.onLeftEdge(() => {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once("camerafadeoutcomplete", () => {
         this.scene.start("BootScene");
+      });
+    });
+
+    this.spiderman.onRightEdge(() => {
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once("camerafadeoutcomplete", () => {
+        this.scene.start("ProjectsScene");
       });
     });
   }
