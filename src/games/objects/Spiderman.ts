@@ -1,21 +1,21 @@
 import Phaser from "phaser";
 import { ComicUI } from "../ui/ComicUI";
 
-const SCALE      = 0.3;
+const SCALE = 0.3;
 const FRAME_RATE = 12;
-const SPEED      = 500;
-const BODY_HW    = 30;
+const SPEED = 500;
+const BODY_HW = 30;
 
 // Measured from spritesheet: visual character travels ~176px across wallCrawl.
 // User-tuned to 300 with progress capped at 0.6 for best visual feel.
 const WALL_CRAWL_X_SHIFT = 300;
 
 const ANIMS = {
-  warmup:    { start: 0,   end: 34,  repeat: -1 },
-  run:       { start: 35,  end: 58,  repeat: -1 },
-  jump:      { start: 59,  end: 80,  repeat: 0  },
-  land:      { start: 65,  end: 80,  repeat: 0  },
-  wallCrawl: { start: 102, end: 124, repeat: 0  },
+  warmup: { start: 0, end: 34, repeat: -1 },
+  run: { start: 35, end: 58, repeat: -1 },
+  jump: { start: 59, end: 80, repeat: 0 },
+  land: { start: 65, end: 80, repeat: 0 },
+  wallCrawl: { start: 102, end: 124, repeat: 0 },
 } as const;
 
 type AnimKey = keyof typeof ANIMS;
@@ -48,10 +48,10 @@ export class Spiderman {
 
     const kb = scene.input.keyboard!;
     this.keys = {
-      up:       kb.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      down:     kb.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      left:     kb.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      right:    kb.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      up: kb.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      down: kb.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      left: kb.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      right: kb.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       interact: kb.addKey(Phaser.Input.Keyboard.KeyCodes.I),
     };
 
@@ -62,7 +62,7 @@ export class Spiderman {
     const speed = (SPEED * delta) / 1000;
     let dx = 0;
 
-    if (this.keys.left.isDown)  dx -= speed;
+    if (this.keys.left.isDown) dx -= speed;
     if (this.keys.right.isDown) dx += speed;
 
     const { width } = this.scene.scale;
@@ -74,7 +74,11 @@ export class Spiderman {
     );
 
     // Right edge
-    if (!this.rightEdgeFired && this.sprite.x >= width - BODY_HW && this.onRightEdgeCb) {
+    if (
+      !this.rightEdgeFired &&
+      this.sprite.x >= width - BODY_HW &&
+      this.onRightEdgeCb
+    ) {
       this.rightEdgeFired = true;
       this.onRightEdgeCb();
     } else if (this.rightEdgeFired && this.sprite.x < width - BODY_HW) {
@@ -135,7 +139,10 @@ export class Spiderman {
       const { start, end, repeat } = ANIMS[key];
       this.scene.anims.create({
         key,
-        frames: this.scene.anims.generateFrameNumbers("spiderman", { start, end }),
+        frames: this.scene.anims.generateFrameNumbers("spiderman", {
+          start,
+          end,
+        }),
         frameRate: FRAME_RATE,
         repeat,
       });
@@ -166,12 +173,20 @@ export class Spiderman {
     this.syncBubble();
   }
 
-  onRightEdge(cb: () => void): void { this.onRightEdgeCb = cb; }
-  onLeftEdge(cb:  () => void): void { this.onLeftEdgeCb  = cb; }
-  onInteract(cb:  () => void): void { this.onInteractCb  = cb; }
+  onRightEdge(cb: () => void): void {
+    this.onRightEdgeCb = cb;
+  }
+  onLeftEdge(cb: () => void): void {
+    this.onLeftEdgeCb = cb;
+  }
+  onInteract(cb: () => void): void {
+    this.onInteractCb = cb;
+  }
 
   /** Current sprite X — used for proximity detection in scenes. */
-  getX(): number { return this.sprite.x; }
+  getX(): number {
+    return this.sprite.x;
+  }
 
   private syncBubble(): void {
     if (!this.bubble) return;

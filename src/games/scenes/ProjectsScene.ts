@@ -2,13 +2,21 @@ import Phaser from "phaser";
 import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
-import { COMIC_YELLOW, COMIC_RED, COMIC_BLUE, COMIC_BLACK, COMIC_WHITE, CSS_YELLOW } from "../constants";
+import {
+  COMIC_YELLOW,
+  COMIC_RED,
+  COMIC_BLUE,
+  COMIC_BLACK,
+  COMIC_WHITE,
+  CSS_YELLOW,
+} from "../constants";
 
 const GITHUB_URL = "https://github.com/bunthoeuntok";
 
 const PROJECT = {
-  title:       "REPORT BUILD",
-  description: "Customize report layouts and generate\ndocuments with real data.",
+  title: "REPORT BUILD",
+  description:
+    "Customize report layouts and generate\ndocuments with real data.",
 };
 
 const INTERACT_RANGE = 200;
@@ -32,15 +40,21 @@ export class ProjectsScene extends Phaser.Scene {
 
     const { width, height } = this.scale;
 
-    ComicUI.captionBar(this, COMIC_YELLOW, "Projects", "Web-slinging some code", "#000000");
+    ComicUI.captionBar(
+      this,
+      COMIC_YELLOW,
+      "Projects",
+      "Web-slinging some code",
+      "#000000",
+    );
     ComicUI.infoStrip(this, "← A  /  D →  |  I: View project");
 
     // --- Project card ---
     const cardW = width * 0.5;
-    const cardH = height * 0.48;
+    const cardH = height * 0.35;
     const cardX = (width - cardW) / 2;
-    const cardY = height * 0.20;
-    this.cardX  = cardX + cardW / 2;
+    const cardY = height * 0.2;
+    this.cardX = cardX + cardW / 2;
 
     const gfx = this.add.graphics();
     gfx.fillStyle(COMIC_WHITE, 1);
@@ -73,18 +87,35 @@ export class ProjectsScene extends Phaser.Scene {
     });
 
     // GITHUB button
-    this.addButton(cardX + 16, cardY + cardH - 44, 120, 28, "GITHUB", COMIC_BLUE, "#ffffff");
+    this.addButton(
+      cardX + 16,
+      cardY + cardH - 44,
+      120,
+      28,
+      "GITHUB",
+      COMIC_BLUE,
+      "#ffffff",
+    );
 
     // LIVE button (placeholder — no live URL yet)
-    this.addButton(cardX + 148, cardY + cardH - 44, 80, 28, "LIVE", COMIC_RED, "#ffffff");
+    this.addButton(
+      cardX + 148,
+      cardY + cardH - 44,
+      80,
+      28,
+      "LIVE",
+      COMIC_RED,
+      "#ffffff",
+    );
 
     // POW! action word decoration
-    this.add.text(width * 0.82, height * 0.18, "POW!", {
-      fontFamily: "Impact, Arial Black, sans-serif",
-      fontSize: "38px",
-      color: CSS_YELLOW,
-      letterSpacing: 2,
-    })
+    this.add
+      .text(width * 0.82, height * 0.18, "POW!", {
+        fontFamily: "Impact, Arial Black, sans-serif",
+        fontSize: "38px",
+        color: CSS_YELLOW,
+        letterSpacing: 2,
+      })
       .setAngle(-12)
       .setStroke("#000000", 6);
 
@@ -129,12 +160,14 @@ export class ProjectsScene extends Phaser.Scene {
     gfx.lineStyle(2.5, COMIC_BLACK, 1);
     gfx.strokeRect(x, y, w, h);
 
-    this.add.text(x + w / 2, y + h / 2, label, {
-      fontFamily: "Impact, Arial Black, sans-serif",
-      fontSize: "12px",
-      color: textColor,
-      letterSpacing: 1,
-    }).setOrigin(0.5);
+    this.add
+      .text(x + w / 2, y + h / 2, label, {
+        fontFamily: "Impact, Arial Black, sans-serif",
+        fontSize: "12px",
+        color: textColor,
+        letterSpacing: 1,
+      })
+      .setOrigin(0.5);
   }
 
   update(_time: number, delta: number): void {

@@ -2,10 +2,24 @@ import Phaser from "phaser";
 import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
-import { COMIC_BLUE, COMIC_BLACK, COMIC_WHITE, CSS_RED, CSS_BLUE } from "../constants";
+import {
+  COMIC_BLUE,
+  COMIC_BLACK,
+  COMIC_WHITE,
+  CSS_RED,
+  CSS_BLUE,
+} from "../constants";
 
-const BIO    = "Passionate developer crafting web experiences\nwith modern technologies and creative flair.";
-const SKILLS = ["TypeScript", "React", "Node.js", "Phaser", "PostgreSQL", "Docker"];
+const BIO =
+  "Passionate developer crafting web experiences\nwith modern technologies and creative flair.";
+const SKILLS = [
+  "TypeScript",
+  "React",
+  "Node.js",
+  "Phaser",
+  "PostgreSQL",
+  "Docker",
+];
 
 export class AboutMeScene extends Phaser.Scene {
   private spiderman!: Spiderman;
@@ -25,14 +39,20 @@ export class AboutMeScene extends Phaser.Scene {
 
     const { width, height } = this.scale;
 
-    ComicUI.captionBar(this, COMIC_BLUE, "About Me", "The Origin Story", "#ffffff");
+    ComicUI.captionBar(
+      this,
+      COMIC_BLUE,
+      "About Me",
+      "The Origin Story",
+      "#ffffff",
+    );
     ComicUI.infoStrip(this, "← A  /  D →  |  I: Interact");
 
     // --- Bio card ---
     const cardX = width * 0.08;
     const cardY = height * 0.13;
     const cardW = width * 0.56;
-    const cardH = height * 0.72;
+    const cardH = height * 0.45;
     const gfx = this.add.graphics();
 
     gfx.fillStyle(COMIC_WHITE, 1);
@@ -73,9 +93,9 @@ export class AboutMeScene extends Phaser.Scene {
       .setDepth(6);
 
     // Skill chips
-    const chipPadX   = 10;
-    const chipPadY   = 5;
-    const chipGap    = 8;
+    const chipPadX = 10;
+    const chipPadY = 5;
+    const chipGap = 8;
     const chipsPerRow = 3;
     const chipFont = {
       fontFamily: "Impact, Arial Black, sans-serif",
@@ -94,18 +114,16 @@ export class AboutMeScene extends Phaser.Scene {
       labelObj.destroy();
 
       const colW = (cardW - 32) / chipsPerRow;
-      const cx   = cardX + 16 + col * colW;
-      const cy   = cardY + 136 + row * (ch + chipGap);
+      const cx = cardX + 16 + col * colW;
+      const cy = cardY + 136 + row * (ch + chipGap);
 
       const cg = this.add.graphics().setDepth(6);
-      cg.fillStyle(0x003B8E, 1);
+      cg.fillStyle(0x003b8e, 1);
       cg.fillRect(cx, cy, cw, ch);
       cg.lineStyle(2.5, COMIC_BLACK, 1);
       cg.strokeRect(cx, cy, cw, ch);
 
-      this.add
-        .text(cx + chipPadX, cy + chipPadY, skill, chipFont)
-        .setDepth(7);
+      this.add.text(cx + chipPadX, cy + chipPadY, skill, chipFont).setDepth(7);
     });
 
     // --- Spiderman ---
