@@ -6,13 +6,17 @@ export function PhaserContainer() {
 
   useEffect(() => {
     if (!phaserRef.current) return;
-
     const game = createGame(phaserRef.current);
-
-    return () => {
-      game.destroy(true);
-    };
+    return () => { game.destroy(true); };
   }, []);
 
-  return <div id="phaser-container" ref={phaserRef} style={{ width: "100%", height: "100vh" }} />;
+  return (
+    <div id="comic-page">
+      <div
+        id="phaser-container"
+        ref={phaserRef}
+        style={{ width: "900px", height: "540px" }}
+      />
+    </div>
+  );
 }
