@@ -66,7 +66,6 @@ export class Car {
         x: targetX,
         duration,
         ease: "Linear",
-        delay,
         onComplete: loop,
       });
     };

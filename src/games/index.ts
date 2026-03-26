@@ -1,12 +1,13 @@
 import Phaser from "phaser";
 import { BootScene } from "./scenes/BootScene";
+import { AboutMeScene } from "./scenes/AboutMeScene";
 
 export function createGame(parent: HTMLElement): Phaser.Game {
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent,
     backgroundColor: "#05050f",
-    scene: [BootScene],
+    scene: [BootScene, AboutMeScene],
     scale: {
       mode: Phaser.Scale.RESIZE,
       parent,

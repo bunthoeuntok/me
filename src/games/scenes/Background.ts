@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Buildings } from "../objects/Buildings";
 import { Road } from "../objects/Road";
 import { Car } from "../objects/Car";
+import { ROAD_H } from "../constants";
 
 export class Background {
   constructor(scene: Phaser.Scene) {
@@ -15,8 +16,7 @@ export class Background {
   }
 
   private spawnCars(scene: Phaser.Scene, width: number, height: number): void {
-    const roadH = 60;
-    const roadY = height - roadH;
+    const roadY = height - ROAD_H;
     const carW = 52;
 
     // direction: 1 = left→right (bottom lane), -1 = right→left (top lane)
@@ -28,7 +28,7 @@ export class Background {
       { startX: width * 0.5,  laneT: 0.28, dir: -1 as const, color: 0x8e44ad, speed: 120, delay: 2000 },
     ];
 
-    carDefs.forEach((config) => new Car(scene, roadY, roadH, config));
+    carDefs.forEach((config) => new Car(scene, roadY, ROAD_H, config));
   }
 
   private drawSpiderWeb(
@@ -45,7 +45,7 @@ export class Background {
     const maxLen = 280;
     const spreadAngle = Math.PI / 2; // 90°
 
-    // Angle range: left web fans to bottom-right, right fans to bottom-left
+    // Angle range: left web fans right/downward (0°→90°), right web fans downward/leftward (90°→180°)
     const baseAngle = side === "left" ? 0 : Math.PI / 2;
 
     // Compute ray endpoints

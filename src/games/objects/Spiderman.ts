@@ -2,11 +2,10 @@ import Phaser from "phaser";
 
 const SCALE = 0.3;
 const FRAME_RATE = 12;
-const SPEED = 100;
+const SPEED = 500;
 
 // Actual character body half-size within the frame (excluding transparent padding)
 const BODY_HW = 30;
-const BODY_HH = 50;
 
 const ANIMS = {
   warmup: { start: 0, end: 34, repeat: -1 },
@@ -30,6 +29,10 @@ export class Spiderman {
   };
   private tooltip: Phaser.GameObjects.Text | null = null;
   private sayMessage: string = "";
+  private onRightEdgeCb?: () => void;
+  private rightEdgeFired = false;
+  private onLeftEdgeCb?: () => void;
+  private leftEdgeFired = false;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -55,23 +58,35 @@ export class Spiderman {
   update(delta: number): void {
     const speed = (SPEED * delta) / 1000;
     let dx = 0;
-    const dy = 0;
 
     if (this.keys.left.isDown) dx -= speed;
     if (this.keys.right.isDown) dx += speed;
 
-    const { width, height } = this.scene.scale;
+    const { width } = this.scene.scale;
 
     this.sprite.x = Phaser.Math.Clamp(
       this.sprite.x + dx,
       BODY_HW,
       width - BODY_HW,
     );
-    this.sprite.y = Phaser.Math.Clamp(
-      this.sprite.y + dy,
-      BODY_HH,
-      height - BODY_HH,
-    );
+
+    if (
+      !this.rightEdgeFired &&
+      this.sprite.x >= width - BODY_HW &&
+      this.onRightEdgeCb
+    ) {
+      this.rightEdgeFired = true;
+      this.onRightEdgeCb();
+    } else if (this.rightEdgeFired && this.sprite.x < width - BODY_HW) {
+      this.rightEdgeFired = false;
+    }
+
+    if (!this.leftEdgeFired && this.sprite.x <= BODY_HW && this.onLeftEdgeCb) {
+      this.leftEdgeFired = true;
+      this.onLeftEdgeCb();
+    } else if (this.leftEdgeFired && this.sprite.x > BODY_HW) {
+      this.leftEdgeFired = false;
+    }
 
     if (Phaser.Input.Keyboard.JustDown(this.keys.interact)) {
       this.showTooltip();
@@ -105,6 +120,7 @@ export class Spiderman {
 
   private registerAnims(): void {
     (Object.keys(ANIMS) as AnimKey[]).forEach((key) => {
+      if (this.scene.anims.exists(key)) return;
       const { start, end, repeat } = ANIMS[key];
       this.scene.anims.create({
         key,
@@ -118,49 +134,16 @@ export class Spiderman {
     });
   }
 
-  playWarmup(): void {
+  playWarmup(x = 0): void {
     const { height } = this.scene.scale;
-    this.sprite.setPosition(0, height - 75);
+    this.sprite.setPosition(x, height - 75);
     this.sprite.setFlipX(false);
     this.sprite.play("warmup");
   }
 
-  playRun(): void {
-    const { width, height } = this.scene.scale;
-    const groundY = height * 0.75;
-    const targetX = width * 0.75;
-
-    this.sprite.setPosition(120, groundY);
-    this.sprite.setFlipX(false);
-    this.sprite.play("run");
-
-    this.scene.tweens.add({
-      targets: this.sprite,
-      x: targetX,
-      duration: 3000,
-      ease: "Linear",
-    });
-  }
-
-  playJump(): void {
-    const { width, height } = this.scene.scale;
-    const peakY = height * 0.15;
-    const wallX = width - 60;
-
-    this.sprite.play("jump");
-
-    this.scene.tweens.add({
-      targets: this.sprite,
-      x: wallX,
-      y: peakY,
-      duration: 800,
-      ease: "Sine.easeOut",
-    });
-  }
-
-  playWallCrawl(): void {
+  private playWallCrawl(): void {
     const { height } = this.scene.scale;
-    const topY = height - 75;
+    const topY = height * 0.2;
     this.sprite.play("wallCrawl");
 
     this.scene.tweens.add({
@@ -171,20 +154,16 @@ export class Spiderman {
     });
   }
 
-  playLand(): void {
-    const { height } = this.scene.scale;
-
-    this.sprite.play("land");
-    this.scene.tweens.add({
-      targets: this.sprite,
-      y: height,
-      duration: 6000,
-      ease: "Linear",
-    });
-  }
-
   say(message: string): void {
     this.sayMessage = message;
+  }
+
+  onRightEdge(cb: () => void): void {
+    this.onRightEdgeCb = cb;
+  }
+
+  onLeftEdge(cb: () => void): void {
+    this.onLeftEdgeCb = cb;
   }
 
   private showTooltip(): void {
