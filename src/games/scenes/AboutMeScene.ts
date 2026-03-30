@@ -46,7 +46,7 @@ export class AboutMeScene extends Phaser.Scene {
       "The Origin Story",
       "#ffffff",
     );
-    ComicUI.infoStrip(this, "← A  /  D →  |  I: Interact");
+    ComicUI.infoStrip(this, "← / →  |  I: Interact");
 
     // --- Bio card ---
     const cardX = width * 0.08;

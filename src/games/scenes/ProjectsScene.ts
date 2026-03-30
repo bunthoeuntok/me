@@ -47,7 +47,7 @@ export class ProjectsScene extends Phaser.Scene {
       "Web-slinging some code",
       "#000000",
     );
-    ComicUI.infoStrip(this, "← A  /  D →  |  I: View project");
+    ComicUI.infoStrip(this, "← / →  |  I: View project");
 
     // --- Project card ---
     const cardW = width * 0.5;

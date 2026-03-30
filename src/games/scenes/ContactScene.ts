@@ -44,7 +44,7 @@ export class ContactScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     ComicUI.captionBar(this, COMIC_RED, "Contact", "Send a web");
-    ComicUI.infoStrip(this, "← A  /  D →  |  I: Open link");
+    ComicUI.infoStrip(this, "← / →  |  I: Open link");
 
     // --- Contact cards (stacked vertically in centre) ---
     const cardW = width * 0.5;
