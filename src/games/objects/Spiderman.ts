@@ -48,10 +48,10 @@ export class Spiderman {
 
     const kb = scene.input.keyboard!;
     this.keys = {
-      up: kb.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      down: kb.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      left: kb.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      right: kb.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      up: kb.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+      down: kb.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      left: kb.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+      right: kb.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
       interact: kb.addKey(Phaser.Input.Keyboard.KeyCodes.I),
     };
 

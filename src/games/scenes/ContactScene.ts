@@ -8,19 +8,19 @@ const INTERACT_RANGE = 140;
 
 const CONTACTS = [
   {
-    icon:  "✉",
+    icon: "✉",
     label: "bunthoeun.code@gmail.com",
-    url:   "",
+    url: "",
   },
   {
-    icon:  "⬡",
+    icon: "⬡",
     label: "github.com/bunthoeuntok",
-    url:   "https://github.com/bunthoeuntok",
+    url: "https://github.com/bunthoeuntok",
   },
   {
-    icon:  "in",
+    icon: "in",
     label: "LinkedIn — Bunthoeun Tok",
-    url:   "https://www.linkedin.com/in/bunthoeun-tok-8487ba206",
+    url: "https://www.linkedin.com/in/bunthoeun-tok",
   },
 ];
 
@@ -47,11 +47,11 @@ export class ContactScene extends Phaser.Scene {
     ComicUI.infoStrip(this, "← A  /  D →  |  I: Open link");
 
     // --- Contact cards (stacked vertically in centre) ---
-    const cardW   = width * 0.5;
-    const cardH   = 56;
+    const cardW = width * 0.5;
+    const cardH = 56;
     const cardGap = 14;
-    const startY  = height * 0.20;
-    const cardX   = (width - cardW) / 2;
+    const startY = height * 0.2;
+    const cardX = (width - cardW) / 2;
 
     this.cardCenters = [];
 
@@ -66,18 +66,22 @@ export class ContactScene extends Phaser.Scene {
       gfx.strokeRoundedRect(cardX, cy, cardW, cardH, 6);
 
       // Icon
-      this.add.text(cardX + 16, cy + cardH / 2, icon, {
-        fontFamily: "Impact, Arial Black, sans-serif",
-        fontSize: "20px",
-        color: "#000000",
-      }).setOrigin(0, 0.5);
+      this.add
+        .text(cardX + 16, cy + cardH / 2, icon, {
+          fontFamily: "Impact, Arial Black, sans-serif",
+          fontSize: "20px",
+          color: "#000000",
+        })
+        .setOrigin(0, 0.5);
 
       // Label
-      this.add.text(cardX + 52, cy + cardH / 2, label, {
-        fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
-        fontSize: "13px",
-        color: "#111111",
-      }).setOrigin(0, 0.5);
+      this.add
+        .text(cardX + 52, cy + cardH / 2, label, {
+          fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+          fontSize: "13px",
+          color: "#111111",
+        })
+        .setOrigin(0, 0.5);
     });
 
     // --- Spiderman ---
