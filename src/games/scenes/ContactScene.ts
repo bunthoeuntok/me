@@ -8,6 +8,11 @@ const INTERACT_RANGE = 140;
 
 const CONTACTS = [
   {
+    icon: "☎",
+    label: "(+855) 86 744 606",
+    url: "",
+  },
+  {
     icon: "✉",
     label: "bunthoeun.code@gmail.com",
     url: "",

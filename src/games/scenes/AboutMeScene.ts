@@ -11,14 +11,14 @@ import {
 } from "../constants";
 
 const BIO =
-  "Passionate developer crafting web experiences\nwith modern technologies and creative flair.";
+  "Full-stack developer with 5+ years of experience in C# .NET, ASP.NET MVC, Vue.js & React. Delivered ERP, POS & web solutions across the full development lifecycle.";
 const SKILLS = [
-  "TypeScript",
+  "C# .NET",
+  "ASP.NET MVC",
+  "Vue.js",
   "React",
-  "Node.js",
-  "Phaser",
-  "PostgreSQL",
-  "Docker",
+  "SQL Server",
+  "Laravel",
 ];
 
 export class AboutMeScene extends Phaser.Scene {
@@ -141,7 +141,7 @@ export class AboutMeScene extends Phaser.Scene {
     this.spiderman.onRightEdge(() => {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once("camerafadeoutcomplete", () => {
-        this.scene.start("ProjectsScene");
+        this.scene.start("ExperienceScene");
       });
     });
   }

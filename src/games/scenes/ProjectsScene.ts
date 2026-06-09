@@ -133,7 +133,7 @@ export class ProjectsScene extends Phaser.Scene {
     this.spiderman.onLeftEdge(() => {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once("camerafadeoutcomplete", () => {
-        this.scene.start("AboutMeScene");
+        this.scene.start("ExperienceScene");
       });
     });
 

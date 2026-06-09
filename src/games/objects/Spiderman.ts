@@ -127,7 +127,7 @@ export class Spiderman {
   }
 
   static preload(scene: Phaser.Scene): void {
-    scene.load.spritesheet("spiderman", "spiderman-spritesheet.png", {
+    scene.load.spritesheet("spiderman", `${import.meta.env.BASE_URL}spiderman-spritesheet.png`, {
       frameWidth: 1200,
       frameHeight: 480,
     });
