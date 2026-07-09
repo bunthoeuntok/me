@@ -15,7 +15,7 @@ export function PhaserContainer() {
       <div
         id="phaser-container"
         ref={phaserRef}
-        style={{ width: "900px", height: "540px" }}
+        style={{ width: "100%", height: "100%" }}
       />
     </div>
   );

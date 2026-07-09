@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build Artifacts
+build/
+dist/
+
+# Environment Files
+.env
+.env.local
+
+# Git & Docker
+.git
+.github/
+.gitignore
+.dockerignore
+Dockerfile
+
+# System & Editor
+.DS_Store
+
+# Claude
+.claude/
+docs/

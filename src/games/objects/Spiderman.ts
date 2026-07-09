@@ -149,7 +149,7 @@ export class Spiderman {
     });
   }
 
-  playWarmup(x = 0): void {
+  playWarmup(x = BODY_HW * 2): void {
     const { height } = this.scene.scale;
     this.sprite.setPosition(x, height - 75);
     this.sprite.setFlipX(false);
