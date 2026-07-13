@@ -1,0 +1,9 @@
+services:
+  me-production:
+    build: 
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - "80:80"
+      - "443:443"
+    

@@ -1,10 +1,9 @@
 services:
   me:
     build: .
+    volumes:
+      - ./src:/app/src
     ports:
       - "3000:3000"
-    volumes:
-      - ./:/app
-      - /app/node_modules
-      
+
     command: npm run dev

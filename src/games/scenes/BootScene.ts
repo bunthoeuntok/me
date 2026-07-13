@@ -23,7 +23,7 @@ export class BootScene extends Phaser.Scene {
 
     this.spiderman = new Spiderman(this);
     this.spiderman.playWarmup();
-    this.spiderman.say("Your friendly neighborhood dev!");
+    this.spiderman.say("Your friendly neighborhood dev!!");
     this.spiderman.onRightEdge(() => {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once("camerafadeoutcomplete", () => {
