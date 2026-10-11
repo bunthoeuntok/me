@@ -58,3 +58,51 @@ html, body, #root {
     top: 62px;
   }
 }
+
+/* On-screen controls: only where the primary pointer is a finger. */
+.touch-controls {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    /* sit above the game's info strip */
+    bottom: 36px;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    pointer-events: none;
+  }
+}
+
+.touch-cluster {
+  display: flex;
+  gap: 10px;
+}
+
+.touch-button {
+  pointer-events: auto;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #000;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000;
+  box-shadow: 3px 3px 0 #000;
+  font: 18px Bangers, Impact, sans-serif;
+  letter-spacing: 1px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.touch-button:active {
+  background: #FFD700;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #000;
+}

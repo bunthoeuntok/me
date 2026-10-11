@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { ComicUI } from "../ui/ComicUI";
+import { Controls } from "../controls";
 
 const SCALE = 0.3;
 const FRAME_RATE = 12;
@@ -23,13 +24,7 @@ type AnimKey = keyof typeof ANIMS;
 export class Spiderman {
   private sprite: Phaser.GameObjects.Sprite;
   private scene: Phaser.Scene;
-  private keys!: {
-    up: Phaser.Input.Keyboard.Key;
-    down: Phaser.Input.Keyboard.Key;
-    left: Phaser.Input.Keyboard.Key;
-    right: Phaser.Input.Keyboard.Key;
-    interact: Phaser.Input.Keyboard.Key;
-  };
+  private controls: Controls;
   private bubble: Phaser.GameObjects.Container | null = null;
   private onRightEdgeCb?: () => void;
   private rightEdgeFired = false;
@@ -46,14 +41,7 @@ export class Spiderman {
     this.sprite = scene.add.sprite(-100, height, "spiderman");
     this.sprite.setScale(SCALE);
 
-    const kb = scene.input.keyboard!;
-    this.keys = {
-      up: kb.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-      down: kb.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      left: kb.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-      right: kb.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      interact: kb.addKey(Phaser.Input.Keyboard.KeyCodes.I),
-    };
+    this.controls = new Controls(scene);
 
     this.registerAnims();
   }
@@ -62,8 +50,8 @@ export class Spiderman {
     const speed = (SPEED * delta) / 1000;
     let dx = 0;
 
-    if (this.keys.left.isDown) dx -= speed;
-    if (this.keys.right.isDown) dx += speed;
+    if (this.controls.isDown("left")) dx -= speed;
+    if (this.controls.isDown("right")) dx += speed;
 
     const { width } = this.scene.scale;
 
@@ -94,7 +82,7 @@ export class Spiderman {
     }
 
     // Interact
-    if (Phaser.Input.Keyboard.JustDown(this.keys.interact)) {
+    if (this.controls.justPressed("interact")) {
       this.onInteractCb?.();
     }
 
@@ -102,7 +90,7 @@ export class Spiderman {
 
     const currentAnim = this.sprite.anims.currentAnim?.key;
 
-    if (this.keys.up.isDown) {
+    if (this.controls.isDown("web")) {
       if (!this.wallCrawlActive) this.playWallCrawl();
     } else {
       if (this.wallCrawlActive) {
@@ -112,7 +100,7 @@ export class Spiderman {
         this.wallCrawlActive = false;
       }
 
-      if (this.keys.down.isDown) {
+      if (this.controls.isDown("jump")) {
         if (currentAnim !== "jump") this.sprite.play("jump");
       } else if (dx < 0) {
         this.sprite.setFlipX(true);

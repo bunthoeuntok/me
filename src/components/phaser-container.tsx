@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createGame } from "../games";
 import { loadComicFonts } from "../fonts";
+import { TouchControls } from "./touch-controls";
 
 export function PhaserContainer() {
   const phaserRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,7 @@ export function PhaserContainer() {
         ref={phaserRef}
         style={{ width: "100%", height: "100%" }}
       />
+      <TouchControls />
     </div>
   );
 }
