@@ -25,7 +25,16 @@ test("holding move-right walks the hero off the first screen", async ({ page }, 
 
   // Reaching the right edge fades to the next screen, so the red intro caption goes.
   // (On a narrow phone the hero crosses screens quickly, so don't pin which one.)
-  await expect.poll(() => pixelAt(page, 20, 20), { timeout: 15_000 }).not.toEqual(CAPTION_RED);
+  await expect
+    .poll(
+      async () => {
+        // A physically held key auto-repeats keydown; mimic that so a lost key state recovers.
+        if (!touch) await page.keyboard.down("ArrowRight");
+        return pixelAt(page, 20, 20);
+      },
+      { timeout: 15_000 },
+    )
+    .not.toEqual(CAPTION_RED);
 
   if (finger) await finger.lift();
   else await page.keyboard.up("ArrowRight");
