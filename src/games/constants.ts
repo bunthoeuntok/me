@@ -15,3 +15,7 @@ export const CSS_BLUE   = '#003B8E';
 export const CSS_YELLOW = '#FFD700';
 export const CSS_PAPER  = '#f0ece4';
 export const CSS_NIGHT  = '#0d1b4b';
+
+// Fonts (bundled; loaded before the game starts)
+export const FONT_HEADING = "Bangers, Impact, sans-serif";
+export const FONT_BODY    = "'Comic Neue', 'Comic Sans MS', cursive";

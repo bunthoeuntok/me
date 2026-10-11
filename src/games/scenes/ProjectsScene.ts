@@ -9,6 +9,8 @@ import {
   COMIC_BLACK,
   COMIC_WHITE,
   CSS_YELLOW,
+  FONT_HEADING,
+  FONT_BODY,
 } from "../constants";
 import { profile } from "../../content";
 
@@ -60,7 +62,7 @@ export class ProjectsScene extends Phaser.Scene {
 
     // Card title
     this.add.text(cardX + 16, cardY + 16, PROJECT.title.toUpperCase(), {
-      fontFamily: "Impact, Arial Black, sans-serif",
+      fontFamily: FONT_HEADING,
       fontSize: "22px",
       color: "#000000",
       letterSpacing: 2,
@@ -75,7 +77,7 @@ export class ProjectsScene extends Phaser.Scene {
 
     // Description
     this.add.text(cardX + 16, cardY + 60, PROJECT.description, {
-      fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+      fontFamily: FONT_BODY,
       fontSize: "13px",
       color: "#333333",
       wordWrap: { width: cardW - 32 },
@@ -107,7 +109,7 @@ export class ProjectsScene extends Phaser.Scene {
     // POW! action word decoration
     this.add
       .text(width * 0.82, height * 0.18, "POW!", {
-        fontFamily: "Impact, Arial Black, sans-serif",
+        fontFamily: FONT_HEADING,
         fontSize: "38px",
         color: CSS_YELLOW,
         letterSpacing: 2,
@@ -158,7 +160,7 @@ export class ProjectsScene extends Phaser.Scene {
 
     this.add
       .text(x + w / 2, y + h / 2, label, {
-        fontFamily: "Impact, Arial Black, sans-serif",
+        fontFamily: FONT_HEADING,
         fontSize: "12px",
         color: textColor,
         letterSpacing: 1,

@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 import {
   COMIC_BLACK, COMIC_WHITE,
-  CSS_YELLOW,
+  CSS_YELLOW, FONT_BODY, FONT_HEADING,
 } from '../constants';
 
-const CAPTION_FONT = 'Impact, Arial Black, sans-serif';
-const BUBBLE_FONT  = "'Comic Sans MS', 'Chalkboard SE', cursive";
+const CAPTION_FONT = FONT_HEADING;
+const BUBBLE_FONT  = FONT_BODY;
 
 export class ComicUI {
   /**

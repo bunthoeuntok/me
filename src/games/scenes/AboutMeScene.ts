@@ -8,6 +8,8 @@ import {
   COMIC_WHITE,
   CSS_RED,
   CSS_BLUE,
+  FONT_HEADING,
+  FONT_BODY,
 } from "../constants";
 import { profile } from "../../content";
 
@@ -55,7 +57,7 @@ export class AboutMeScene extends Phaser.Scene {
     // BIO label
     this.add
       .text(cardX + 16, cardY + 14, "BIO", {
-        fontFamily: "Impact, Arial Black, sans-serif",
+        fontFamily: FONT_HEADING,
         fontSize: "14px",
         color: CSS_RED,
         letterSpacing: 3,
@@ -65,7 +67,7 @@ export class AboutMeScene extends Phaser.Scene {
     // Bio text
     this.add
       .text(cardX + 16, cardY + 36, profile.summary, {
-        fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+        fontFamily: FONT_BODY,
         fontSize: "13px",
         color: "#222222",
         wordWrap: { width: cardW - 32 },
@@ -76,7 +78,7 @@ export class AboutMeScene extends Phaser.Scene {
     // SKILLS label
     this.add
       .text(cardX + 16, cardY + 108, "SKILLS", {
-        fontFamily: "Impact, Arial Black, sans-serif",
+        fontFamily: FONT_HEADING,
         fontSize: "14px",
         color: CSS_BLUE,
         letterSpacing: 3,
@@ -89,7 +91,7 @@ export class AboutMeScene extends Phaser.Scene {
     const chipGap = 8;
     const chipsPerRow = 3;
     const chipFont = {
-      fontFamily: "Impact, Arial Black, sans-serif",
+      fontFamily: FONT_HEADING,
       fontSize: "12px",
       color: "#ffffff",
       letterSpacing: 1,

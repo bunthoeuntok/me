@@ -1,13 +1,25 @@
 import { useEffect, useRef } from "react";
 import { createGame } from "../games";
+import { loadComicFonts } from "../fonts";
 
 export function PhaserContainer() {
   const phaserRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!phaserRef.current) return;
-    const game = createGame(phaserRef.current);
-    return () => { game.destroy(true); };
+    const parent = phaserRef.current;
+    if (!parent) return;
+
+    let game: Phaser.Game | undefined;
+    let unmounted = false;
+    // Canvas text can't re-render when a font arrives late, so start the game after the fonts.
+    loadComicFonts().finally(() => {
+      if (!unmounted) game = createGame(parent);
+    });
+
+    return () => {
+      unmounted = true;
+      game?.destroy(true);
+    };
   }, []);
 
   return (

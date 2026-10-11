@@ -10,6 +10,8 @@ import {
   CSS_RED,
   CSS_BLUE,
   CSS_YELLOW,
+  FONT_HEADING,
+  FONT_BODY,
 } from "../constants";
 import { profile } from "../../content";
 
@@ -84,7 +86,7 @@ export class ExperienceScene extends Phaser.Scene {
       // Number badge
       this.add
         .text(cx + cardW - 10, cardY + 8, num, {
-          fontFamily: "Impact, Arial Black, sans-serif",
+          fontFamily: FONT_HEADING,
           fontSize: "22px",
           color: "#dddddd",
           letterSpacing: 1,
@@ -95,7 +97,7 @@ export class ExperienceScene extends Phaser.Scene {
       // Company name
       this.add
         .text(textX, cardY + 10, company.toUpperCase(), {
-          fontFamily: "Impact, Arial Black, sans-serif",
+          fontFamily: FONT_HEADING,
           fontSize: "13px",
           color: cssColor,
           letterSpacing: 1,
@@ -106,7 +108,7 @@ export class ExperienceScene extends Phaser.Scene {
       // Role
       this.add
         .text(textX, cardY + 30, role, {
-          fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+          fontFamily: FONT_BODY,
           fontSize: "11px",
           color: "#333333",
         })
@@ -115,7 +117,7 @@ export class ExperienceScene extends Phaser.Scene {
       // Period
       this.add
         .text(textX, cardY + 47, period, {
-          fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+          fontFamily: FONT_BODY,
           fontSize: "10px",
           color: "#888888",
         })
@@ -133,7 +135,7 @@ export class ExperienceScene extends Phaser.Scene {
       // "Press I" hint
       const hint = this.add
         .text(cx + cardW / 2, cardY + 68, "▶  Press I to discover", {
-          fontFamily: "Impact, Arial Black, sans-serif",
+          fontFamily: FONT_HEADING,
           fontSize: "10px",
           color: "#aaaaaa",
           letterSpacing: 1,
@@ -145,7 +147,7 @@ export class ExperienceScene extends Phaser.Scene {
       // Description (hidden initially)
       const descText = this.add
         .text(textX, cardY + 68, summary, {
-          fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+          fontFamily: FONT_BODY,
           fontSize: "11px",
           color: "#222222",
           wordWrap: { width: cardW - 30 },
@@ -159,7 +161,7 @@ export class ExperienceScene extends Phaser.Scene {
     // Comic action word
     this.add
       .text(width * 0.5, height * 0.65, "ZAP!", {
-        fontFamily: "Impact, Arial Black, sans-serif",
+        fontFamily: FONT_HEADING,
         fontSize: "34px",
         color: CSS_YELLOW,
         letterSpacing: 2,

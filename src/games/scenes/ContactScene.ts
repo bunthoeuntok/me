@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
-import { COMIC_RED, COMIC_BLACK, COMIC_WHITE } from "../constants";
+import { COMIC_RED, COMIC_BLACK, COMIC_WHITE, FONT_HEADING, FONT_BODY } from "../constants";
 import { profile } from "../../content";
 
 const INTERACT_RANGE = 140;
@@ -59,7 +59,7 @@ export class ContactScene extends Phaser.Scene {
       // Icon
       this.add
         .text(cardX + 16, cy + cardH / 2, icon, {
-          fontFamily: "Impact, Arial Black, sans-serif",
+          fontFamily: FONT_HEADING,
           fontSize: "20px",
           color: "#000000",
         })
@@ -68,7 +68,7 @@ export class ContactScene extends Phaser.Scene {
       // Label
       this.add
         .text(cardX + 52, cy + cardH / 2, label, {
-          fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
+          fontFamily: FONT_BODY,
           fontSize: "13px",
           color: "#111111",
         })
