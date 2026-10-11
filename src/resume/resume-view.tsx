@@ -6,10 +6,21 @@ export function ResumeView() {
     profile;
 
   return (
-    <main>
-      <header>
+    <main className="resume">
+      <nav className="resume-toolbar" aria-label="Résumé actions">
+        <a href={import.meta.env.BASE_URL}>← Back to the game</a>
+        <a
+          className="resume-download"
+          href={`${import.meta.env.BASE_URL}resume.pdf`}
+          download={`${name.replace(/\s+/g, "-")}-Resume.pdf`}
+        >
+          Download PDF
+        </a>
+      </nav>
+
+      <header className="resume-header">
         <h1>{name}</h1>
-        <p>{title}</p>
+        <p className="resume-title">{title}</p>
         <p>{summary}</p>
       </header>
 
@@ -17,7 +28,7 @@ export function ResumeView() {
         {jobs.map((job) => (
           <article key={`${job.company}-${job.period}`}>
             <h3>{job.company}</h3>
-            <p>
+            <p className="resume-meta">
               {job.role} · {job.period}
             </p>
             {job.highlights.length > 0 ? (
@@ -38,14 +49,16 @@ export function ResumeView() {
           <article key={project.title}>
             <h3>{project.title}</h3>
             <p>{project.description}</p>
-            <a href={project.githubUrl}>Source on GitHub</a>
-            {project.liveUrl && <a href={project.liveUrl}>Live site</a>}
+            <p className="resume-links">
+              <a href={project.githubUrl}>Source on GitHub</a>
+              {project.liveUrl && <a href={project.liveUrl}>Live site</a>}
+            </p>
           </article>
         ))}
       </Section>
 
       <Section title="Skills">
-        <ul>
+        <ul className="resume-skills">
           {skills.map((skill) => (
             <li key={skill}>{skill}</li>
           ))}
@@ -89,7 +102,7 @@ export function ResumeView() {
       )}
 
       <Section title="Contact">
-        <ul>
+        <ul className="resume-contacts">
           <li>
             <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
           </li>
@@ -97,10 +110,10 @@ export function ResumeView() {
             <a href={`tel:${contacts.phone.replace(/[^\d+]/g, "")}`}>{contacts.phone}</a>
           </li>
           <li>
-            <a href={contacts.githubUrl}>GitHub</a>
+            <a href={contacts.githubUrl}>{withoutProtocol(contacts.githubUrl)}</a>
           </li>
           <li>
-            <a href={contacts.linkedinUrl}>LinkedIn</a>
+            <a href={contacts.linkedinUrl}>{withoutProtocol(contacts.linkedinUrl)}</a>
           </li>
         </ul>
       </Section>
@@ -116,4 +129,8 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       {children}
     </section>
   );
+}
+
+function withoutProtocol(url: string) {
+  return url.replace(/^https?:\/\/(www\.)?/, "");
 }
