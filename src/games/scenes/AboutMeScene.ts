@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
+import { relayoutOnResize, type RelayoutData } from "../relayout";
 import {
   COMIC_BLUE,
   COMIC_BLACK,
@@ -25,10 +26,10 @@ export class AboutMeScene extends Phaser.Scene {
     Spiderman.preload(this);
   }
 
-  create(): void {
+  create(data: RelayoutData = {}): void {
     new Background(this);
 
-    this.cameras.main.fadeIn(600, 0, 0, 0);
+    if (!data.relayout) this.cameras.main.fadeIn(600, 0, 0, 0);
 
     const { width, height } = this.scale;
 
@@ -122,7 +123,8 @@ export class AboutMeScene extends Phaser.Scene {
     // --- Spiderman ---
     this.spiderman = new Spiderman(this);
     this.spiderman.say("Press I to interact!");
-    this.spiderman.playWarmup(width * 0.78);
+    this.spiderman.playWarmup(data.heroX ?? width * 0.78);
+    relayoutOnResize(this, () => this.spiderman.getX());
 
     this.spiderman.onLeftEdge(() => {
       this.cameras.main.fadeOut(500, 0, 0, 0);
