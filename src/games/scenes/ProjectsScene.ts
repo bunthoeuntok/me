@@ -10,14 +10,10 @@ import {
   COMIC_WHITE,
   CSS_YELLOW,
 } from "../constants";
+import { profile } from "../../content";
 
-const GITHUB_URL = "https://github.com/bunthoeuntok";
-
-const PROJECT = {
-  title: "REPORT BUILD",
-  description:
-    "Customize report layouts and generate\ndocuments with real data.",
-};
+// The Projects screen features the first project in the content source.
+const PROJECT = profile.projects[0];
 
 const INTERACT_RANGE = 200;
 
@@ -63,7 +59,7 @@ export class ProjectsScene extends Phaser.Scene {
     gfx.strokeRoundedRect(cardX, cardY, cardW, cardH, 8);
 
     // Card title
-    this.add.text(cardX + 16, cardY + 16, PROJECT.title, {
+    this.add.text(cardX + 16, cardY + 16, PROJECT.title.toUpperCase(), {
       fontFamily: "Impact, Arial Black, sans-serif",
       fontSize: "22px",
       color: "#000000",
@@ -126,7 +122,7 @@ export class ProjectsScene extends Phaser.Scene {
 
     this.spiderman.onInteract(() => {
       if (Math.abs(this.spiderman.getX() - this.cardX) < INTERACT_RANGE) {
-        window.open(GITHUB_URL, "_blank");
+        window.open(PROJECT.githubUrl, "_blank");
       }
     });
 

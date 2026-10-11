@@ -11,35 +11,13 @@ import {
   CSS_BLUE,
   CSS_YELLOW,
 } from "../constants";
+import { profile } from "../../content";
 
-const EXPERIENCES = [
-  {
-    num: "01",
-    company: "TECHBODIA",
-    role: "Full-stack Developer",
-    period: "Mar 2023 – Present",
-    desc: "ASP.NET MVC & .NET Core APIs, SQL Server optimization, GitLab CI/CD pipelines. Code reviews & stakeholder coordination.",
-    color: COMIC_RED,
-    cssColor: CSS_RED,
-  },
-  {
-    num: "02",
-    company: "WINTECH",
-    role: "Web Developer",
-    period: "2019 – 2022",
-    desc: "Built school mgmt, POS & registration portals using PHP, Laravel & Vue.js. Created RESTful APIs for mobile apps.",
-    color: COMIC_BLUE,
-    cssColor: CSS_BLUE,
-  },
-  {
-    num: "03",
-    company: "BLUE TECHNOLOGY",
-    role: "NAV Consultant",
-    period: "Jan – Apr 2019",
-    desc: "Customized Microsoft Dynamics NAV (ERP) for retail & distribution clients. Bridged business requirements and dev teams.",
-    color: 0x555555,
-    cssColor: "#555555",
-  },
+// Accent colours for the job cards, most recent first.
+const CARD_ACCENTS = [
+  { color: COMIC_RED, cssColor: CSS_RED },
+  { color: COMIC_BLUE, cssColor: CSS_BLUE },
+  { color: 0x555555, cssColor: "#555555" },
 ];
 
 export class ExperienceScene extends Phaser.Scene {
@@ -74,7 +52,7 @@ export class ExperienceScene extends Phaser.Scene {
     ComicUI.captionBar(this, COMIC_RED, "Experience", "The Career Arc");
     ComicUI.infoStrip(this, "← / →  Navigate  |  I: Discover");
 
-    const numCards = EXPERIENCES.length;
+    const numCards = profile.jobs.length;
     const gapBetween = 12;
     const cardW = Math.floor((width * 0.88 - gapBetween * (numCards - 1)) / numCards);
     const cardH = Math.min(Math.max(110, height * 0.27), 140);
@@ -83,7 +61,9 @@ export class ExperienceScene extends Phaser.Scene {
 
     this.interactRange = cardW / 2 + 20;
 
-    EXPERIENCES.forEach(({ num, company, role, period, desc, color, cssColor }, i) => {
+    profile.jobs.forEach(({ company, role, period, summary }, i) => {
+      const num = String(i + 1).padStart(2, "0");
+      const { color, cssColor } = CARD_ACCENTS[i % CARD_ACCENTS.length];
       const cx = cardX0 + i * (cardW + gapBetween);
       this.cardCenters.push(cx + cardW / 2);
 
@@ -114,7 +94,7 @@ export class ExperienceScene extends Phaser.Scene {
 
       // Company name
       this.add
-        .text(textX, cardY + 10, company, {
+        .text(textX, cardY + 10, company.toUpperCase(), {
           fontFamily: "Impact, Arial Black, sans-serif",
           fontSize: "13px",
           color: cssColor,
@@ -164,7 +144,7 @@ export class ExperienceScene extends Phaser.Scene {
 
       // Description (hidden initially)
       const descText = this.add
-        .text(textX, cardY + 68, desc, {
+        .text(textX, cardY + 68, summary, {
           fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
           fontSize: "11px",
           color: "#222222",

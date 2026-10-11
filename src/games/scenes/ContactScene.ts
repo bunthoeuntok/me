@@ -3,30 +3,16 @@ import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
 import { COMIC_RED, COMIC_BLACK, COMIC_WHITE } from "../constants";
+import { profile } from "../../content";
 
 const INTERACT_RANGE = 140;
 
+const { contacts } = profile;
 const CONTACTS = [
-  {
-    icon: "☎",
-    label: "(+855) 86 744 606",
-    url: "",
-  },
-  {
-    icon: "✉",
-    label: "bunthoeun.code@gmail.com",
-    url: "",
-  },
-  {
-    icon: "⬡",
-    label: "github.com/bunthoeuntok",
-    url: "https://github.com/bunthoeuntok",
-  },
-  {
-    icon: "in",
-    label: "LinkedIn — Bunthoeun Tok",
-    url: "https://www.linkedin.com/in/bunthoeun-tok",
-  },
+  { icon: "☎", label: contacts.phone, url: "" },
+  { icon: "✉", label: contacts.email, url: "" },
+  { icon: "⬡", label: contacts.githubUrl.replace(/^https:\/\//, ""), url: contacts.githubUrl },
+  { icon: "in", label: `LinkedIn — ${profile.name}`, url: contacts.linkedinUrl },
 ];
 
 export class ContactScene extends Phaser.Scene {

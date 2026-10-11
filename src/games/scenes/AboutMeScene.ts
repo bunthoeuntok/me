@@ -9,17 +9,8 @@ import {
   CSS_RED,
   CSS_BLUE,
 } from "../constants";
+import { profile } from "../../content";
 
-const BIO =
-  "Full-stack developer with 5+ years of experience in C# .NET, ASP.NET MVC, Vue.js & React. Delivered ERP, POS & web solutions across the full development lifecycle.";
-const SKILLS = [
-  "C# .NET",
-  "ASP.NET MVC",
-  "Vue.js",
-  "React",
-  "SQL Server",
-  "Laravel",
-];
 
 export class AboutMeScene extends Phaser.Scene {
   private spiderman!: Spiderman;
@@ -73,7 +64,7 @@ export class AboutMeScene extends Phaser.Scene {
 
     // Bio text
     this.add
-      .text(cardX + 16, cardY + 36, BIO, {
+      .text(cardX + 16, cardY + 36, profile.summary, {
         fontFamily: "'Comic Sans MS', 'Chalkboard SE', cursive",
         fontSize: "13px",
         color: "#222222",
@@ -104,7 +95,7 @@ export class AboutMeScene extends Phaser.Scene {
       letterSpacing: 1,
     };
 
-    SKILLS.forEach((skill, i) => {
+    profile.skills.forEach((skill, i) => {
       const col = i % chipsPerRow;
       const row = Math.floor(i / chipsPerRow);
 

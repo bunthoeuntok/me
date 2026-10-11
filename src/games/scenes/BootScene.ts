@@ -3,6 +3,7 @@ import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
 import { COMIC_RED } from "../constants";
+import { profile } from "../../content";
 
 export class BootScene extends Phaser.Scene {
   private spiderman!: Spiderman;
@@ -18,7 +19,7 @@ export class BootScene extends Phaser.Scene {
   create(): void {
     new Background(this);
 
-    ComicUI.captionBar(this, COMIC_RED, "Bunthoeun Tok", "Full-Stack Developer");
+    ComicUI.captionBar(this, COMIC_RED, profile.name, profile.title);
     ComicUI.infoStrip(this, "→  Walk right to continue");
 
     this.spiderman = new Spiderman(this);
