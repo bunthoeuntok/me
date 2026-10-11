@@ -3,6 +3,7 @@ import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
 import { relayoutOnResize, type RelayoutData } from "../relayout";
+import { INTERACT_KEY } from "../controls";
 import { COMIC_RED, COMIC_BLACK, COMIC_WHITE, FONT_HEADING, FONT_BODY } from "../constants";
 import { profile } from "../../content";
 
@@ -36,7 +37,7 @@ export class ContactScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     ComicUI.captionBar(this, COMIC_RED, "Contact", "Send a web");
-    ComicUI.infoStrip(this, "← / →  |  I: Open link");
+    ComicUI.infoStrip(this, `← / →  |  ${INTERACT_KEY}: Open link`);
 
     // --- Contact cards (stacked vertically in centre) ---
     const cardW = width * 0.5;

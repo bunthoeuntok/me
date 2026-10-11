@@ -11,6 +11,9 @@ const bangers = readFileSync(
   resolve(root, "node_modules/@fontsource/bangers/files/bangers-latin-400-normal.woff2"),
 ).toString("base64");
 
+const escape = (text: string) =>
+  text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 const html = `<!doctype html>
 <style>
   @font-face { font-family: Bangers; src: url(data:font/woff2;base64,${bangers}) format("woff2"); }
@@ -31,8 +34,8 @@ const html = `<!doctype html>
 </style>
 <div class="bar">Portfolio</div>
 <div class="main">
-  <h1>${profile.name}</h1>
-  <div class="title">${profile.title}</div>
+  <h1>${escape(profile.name)}</h1>
+  <div class="title">${escape(profile.title)}</div>
 </div>
 <div class="cta"><span>Explore the city</span><span>Read the résumé</span></div>`;
 

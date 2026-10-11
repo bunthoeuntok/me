@@ -3,6 +3,7 @@ import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
 import { relayoutOnResize, type RelayoutData } from "../relayout";
+import { INTERACT_KEY, PRESS_INTERACT } from "../controls";
 import {
   COMIC_BLUE,
   COMIC_BLACK,
@@ -11,6 +12,7 @@ import {
   CSS_BLUE,
   FONT_HEADING,
   FONT_BODY,
+  NARROW_WIDTH,
 } from "../constants";
 import { profile } from "../../content";
 
@@ -40,24 +42,20 @@ export class AboutMeScene extends Phaser.Scene {
       "The Origin Story",
       "#ffffff",
     );
-    ComicUI.infoStrip(this, "← / →  |  I: Interact");
+    ComicUI.infoStrip(this, `← / →  |  ${INTERACT_KEY}: Interact`);
 
     // --- Bio card ---
-    const cardX = width * 0.08;
+    // Content flows top to bottom from measured text, so it fits portrait phones too.
+    const narrow = width < NARROW_WIDTH;
+    const cardX = width * (narrow ? 0.06 : 0.08);
     const cardY = height * 0.13;
-    const cardW = width * 0.56;
-    const cardH = height * 0.45;
-    const gfx = this.add.graphics();
-
-    gfx.fillStyle(COMIC_WHITE, 1);
-    gfx.fillRoundedRect(cardX, cardY, cardW, cardH, 8);
-    gfx.lineStyle(3, COMIC_BLACK, 1);
-    gfx.strokeRoundedRect(cardX, cardY, cardW, cardH, 8);
-    gfx.setDepth(5);
+    const cardW = width * (narrow ? 0.88 : 0.56);
+    const pad = 16;
+    const innerRight = cardX + cardW - pad;
 
     // BIO label
-    this.add
-      .text(cardX + 16, cardY + 14, "BIO", {
+    const bioLabel = this.add
+      .text(cardX + pad, cardY + 14, "BIO", {
         fontFamily: FONT_HEADING,
         fontSize: "14px",
         color: CSS_RED,
@@ -66,19 +64,19 @@ export class AboutMeScene extends Phaser.Scene {
       .setDepth(6);
 
     // Bio text
-    this.add
-      .text(cardX + 16, cardY + 36, profile.summary, {
+    const bio = this.add
+      .text(cardX + pad, bioLabel.y + bioLabel.height + 6, profile.summary, {
         fontFamily: FONT_BODY,
         fontSize: "13px",
         color: "#222222",
-        wordWrap: { width: cardW - 32 },
+        wordWrap: { width: cardW - pad * 2 },
         lineSpacing: 4,
       })
       .setDepth(6);
 
     // SKILLS label
-    this.add
-      .text(cardX + 16, cardY + 108, "SKILLS", {
+    const skillsLabel = this.add
+      .text(cardX + pad, bio.y + bio.height + 18, "SKILLS", {
         fontFamily: FONT_HEADING,
         fontSize: "14px",
         color: CSS_BLUE,
@@ -86,11 +84,10 @@ export class AboutMeScene extends Phaser.Scene {
       })
       .setDepth(6);
 
-    // Skill chips
+    // Skill chips, wrapping onto new rows as needed
     const chipPadX = 10;
     const chipPadY = 5;
     const chipGap = 8;
-    const chipsPerRow = 3;
     const chipFont = {
       fontFamily: FONT_HEADING,
       fontSize: "12px",
@@ -98,31 +95,40 @@ export class AboutMeScene extends Phaser.Scene {
       letterSpacing: 1,
     };
 
-    profile.skills.forEach((skill, i) => {
-      const col = i % chipsPerRow;
-      const row = Math.floor(i / chipsPerRow);
-
-      const labelObj = this.add.text(0, 0, skill, chipFont).setVisible(false);
-      const cw = labelObj.width + chipPadX * 2;
-      const ch = labelObj.height + chipPadY * 2;
-      labelObj.destroy();
-
-      const colW = (cardW - 32) / chipsPerRow;
-      const cx = cardX + 16 + col * colW;
-      const cy = cardY + 136 + row * (ch + chipGap);
+    let chipX = cardX + pad;
+    let chipY = skillsLabel.y + skillsLabel.height + 10;
+    let chipsBottom = chipY;
+    profile.skills.forEach((skill) => {
+      const label = this.add.text(0, 0, skill, chipFont).setDepth(7);
+      const cw = label.width + chipPadX * 2;
+      const ch = label.height + chipPadY * 2;
+      if (chipX > cardX + pad && chipX + cw > innerRight) {
+        chipX = cardX + pad;
+        chipY += ch + chipGap;
+      }
+      label.setPosition(chipX + chipPadX, chipY + chipPadY);
 
       const cg = this.add.graphics().setDepth(6);
-      cg.fillStyle(0x003b8e, 1);
-      cg.fillRect(cx, cy, cw, ch);
+      cg.fillStyle(COMIC_BLUE, 1);
+      cg.fillRect(chipX, chipY, cw, ch);
       cg.lineStyle(2.5, COMIC_BLACK, 1);
-      cg.strokeRect(cx, cy, cw, ch);
+      cg.strokeRect(chipX, chipY, cw, ch);
 
-      this.add.text(cx + chipPadX, cy + chipPadY, skill, chipFont).setDepth(7);
+      chipX += cw + chipGap;
+      chipsBottom = chipY + ch;
     });
+
+    // Card behind the content, tall enough for it
+    const cardH = Math.max(height * 0.45, chipsBottom - cardY + pad);
+    const gfx = this.add.graphics().setDepth(5);
+    gfx.fillStyle(COMIC_WHITE, 1);
+    gfx.fillRoundedRect(cardX, cardY, cardW, cardH, 8);
+    gfx.lineStyle(3, COMIC_BLACK, 1);
+    gfx.strokeRoundedRect(cardX, cardY, cardW, cardH, 8);
 
     // --- Spiderman ---
     this.spiderman = new Spiderman(this);
-    this.spiderman.say("Press I to interact!");
+    this.spiderman.say(`${PRESS_INTERACT} to interact!`);
     this.spiderman.playWarmup(data.heroX ?? width * 0.78);
     relayoutOnResize(this, () => this.spiderman.getX());
 

@@ -1,6 +1,9 @@
 // Road
 export const ROAD_H = 60;
 
+// Below this width (portrait phones) screens switch to a stacked/wider layout.
+export const NARROW_WIDTH = 600;
+
 // Comic palette — integer form for Phaser graphics
 export const COMIC_RED    = 0xE23636;
 export const COMIC_BLUE   = 0x003B8E;

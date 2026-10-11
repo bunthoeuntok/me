@@ -25,13 +25,15 @@ export function relayoutOnResize(scene: Phaser.Scene, getHeroX: () => number): v
   const rebuildIfSizeChanged = () => {
     const { width, height } = scene.scale;
     if (width === builtWidth && height === builtHeight) return;
+    // Mid-transition to another screen: let it finish; that screen is built at the new size.
+    if (scene.cameras.main.fadeEffect.isRunning) return;
 
     const data: RelayoutData = {
       // Keep clear of the edges, which trigger moving to the next screen.
       heroX: Phaser.Math.Clamp(
         (getHeroX() / builtWidth) * width,
-        EDGE_CLEARANCE,
-        width - EDGE_CLEARANCE,
+        Math.min(EDGE_CLEARANCE, width / 2),
+        Math.max(width - EDGE_CLEARANCE, width / 2),
       ),
       relayout: true,
     };

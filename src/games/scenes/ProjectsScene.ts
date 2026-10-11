@@ -3,6 +3,7 @@ import { Spiderman } from "../objects/Spiderman";
 import { Background } from "./Background";
 import { ComicUI } from "../ui/ComicUI";
 import { relayoutOnResize, type RelayoutData } from "../relayout";
+import { INTERACT_KEY, PRESS_INTERACT } from "../controls";
 import {
   COMIC_YELLOW,
   COMIC_RED,
@@ -46,7 +47,7 @@ export class ProjectsScene extends Phaser.Scene {
       "Web-slinging some code",
       "#000000",
     );
-    ComicUI.infoStrip(this, "← / →  |  I: View project");
+    ComicUI.infoStrip(this, `← / →  |  ${INTERACT_KEY}: View project`);
 
     // --- Project card ---
     const cardW = width * 0.5;
@@ -120,7 +121,7 @@ export class ProjectsScene extends Phaser.Scene {
 
     // --- Spiderman ---
     this.spiderman = new Spiderman(this);
-    this.spiderman.say("Press I to view!");
+    this.spiderman.say(`${PRESS_INTERACT} to view!`);
     this.spiderman.playWarmup(data.heroX ?? width * 0.75);
     relayoutOnResize(this, () => this.spiderman.getX());
 

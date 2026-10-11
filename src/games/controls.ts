@@ -26,11 +26,20 @@ export const onScreenButtons = {
   },
 };
 
+/** True when the Visitor plays with on-screen buttons (same rule as the CSS that shows them). */
+export const usesTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
+/** How to name the interact control in on-screen prompts. */
+export const INTERACT_KEY = usesTouch ? "GO" : "I";
+export const PRESS_INTERACT = usesTouch ? "Tap GO" : "Press I";
+
 /** One scene's view of the Visitor's input: keyboard and on-screen buttons combined. */
 export class Controls {
   private keys: Record<Action, Phaser.Input.Keyboard.Key[]>;
 
   constructor(scene: Phaser.Scene) {
+    // A press made before this scene existed (loading, a screen transition) shouldn't act here.
+    buttonsPressedSinceRead.clear();
     const keyboard = scene.input.keyboard!;
     this.keys = Object.fromEntries(
       (Object.keys(KEYS) as Action[]).map((action) => [

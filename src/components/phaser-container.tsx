@@ -13,9 +13,11 @@ export function PhaserContainer() {
     let game: Phaser.Game | undefined;
     let unmounted = false;
     // Canvas text can't re-render when a font arrives late, so start the game after the fonts.
-    loadComicFonts().finally(() => {
-      if (!unmounted) game = createGame(parent);
-    });
+    loadComicFonts()
+      .catch(() => {}) // a missing font falls back to the system font; still start the game
+      .then(() => {
+        if (!unmounted) game = createGame(parent);
+      });
 
     return () => {
       unmounted = true;
