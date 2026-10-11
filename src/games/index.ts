@@ -10,6 +10,10 @@ export function createGame(parent: HTMLElement): Phaser.Game {
     type: Phaser.AUTO,
     parent,
     backgroundColor: "#f0ece4",
+    // Phaser caps each frame's time step for its first `panicMax` frames. On a slow
+    // device (few fps) that makes the opening seconds run in slow motion; movement
+    // is already clamped, so skip the cooldown.
+    fps: { panicMax: 0 },
     scene: [BootScene, AboutMeScene, ExperienceScene, ProjectsScene, ContactScene],
     scale: {
       mode: Phaser.Scale.RESIZE,
