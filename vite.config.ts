@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig } from 'vitest/config'
+import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { profile } from './src/content'
 
@@ -33,6 +34,9 @@ export default defineConfig(({ mode }) => ({
         resume: resolve(import.meta.dirname, 'resume/index.html'),
       },
     },
+  },
+  test: {
+    include: ['src/**/*.test.ts'],
   },
   server: {
     host: true,

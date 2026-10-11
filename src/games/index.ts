@@ -4,6 +4,10 @@ import { AboutMeScene } from "./scenes/AboutMeScene";
 import { ExperienceScene } from "./scenes/ExperienceScene";
 import { ProjectsScene } from "./scenes/ProjectsScene";
 import { ContactScene } from "./scenes/ContactScene";
+import { CityScene } from "../city/city-scene";
+
+// The continuous City is being built behind ?city until it can replace the section screens.
+const useCity = new URLSearchParams(window.location.search).has("city");
 
 export function createGame(parent: HTMLElement): Phaser.Game {
   const config: Phaser.Types.Core.GameConfig = {
@@ -14,7 +18,9 @@ export function createGame(parent: HTMLElement): Phaser.Game {
     // device (few fps) that makes the opening seconds run in slow motion; movement
     // is already clamped, so skip the cooldown.
     fps: { panicMax: 0 },
-    scene: [BootScene, AboutMeScene, ExperienceScene, ProjectsScene, ContactScene],
+    scene: useCity
+      ? [CityScene]
+      : [BootScene, AboutMeScene, ExperienceScene, ProjectsScene, ContactScene],
     scale: {
       mode: Phaser.Scale.RESIZE,
       parent,

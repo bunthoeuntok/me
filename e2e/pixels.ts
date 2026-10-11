@@ -21,5 +21,6 @@ export async function pixelAt(page: Page, x: number, y: number) {
 }
 
 export const WHITE = { r: 255, g: 255, b: 255 };
-/** The intro screen's caption bar. */
+/** Caption bar colours: red for the intro, blue for About Me. */
 export const CAPTION_RED = { r: 0xe2, g: 0x36, b: 0x36 };
+export const CAPTION_BLUE = { r: 0x00, g: 0x3b, b: 0x8e };

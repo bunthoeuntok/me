@@ -12,32 +12,23 @@ const SETTLE_MS = 150;
 const EDGE_CLEARANCE = 60;
 
 /**
- * Every scene computes its layout once in create(), so rebuild the scene at the
- * new size whenever the window resizes or the device rotates, keeping the hero
- * at the same relative position.
+ * Calls `rebuild` once a resize has settled and the size really changed since the
+ * scene was built. Reads the settled size rather than trusting each event: on
+ * rotation, the first resize event can still report the old orientation.
  */
-export function relayoutOnResize(scene: Phaser.Scene, getHeroX: () => number): void {
+export function onSettledResize(
+  scene: Phaser.Scene,
+  rebuild: (size: { width: number; height: number; builtWidth: number }) => void,
+): void {
   const { width: builtWidth, height: builtHeight } = scene.scale;
   let pending: Phaser.Time.TimerEvent | undefined;
 
-  // Read the size once things settle rather than trusting each event: on rotation,
-  // the first resize event can still report the old orientation.
   const rebuildIfSizeChanged = () => {
     const { width, height } = scene.scale;
     if (width === builtWidth && height === builtHeight) return;
     // Mid-transition to another screen: let it finish; that screen is built at the new size.
     if (scene.cameras.main.fadeEffect.isRunning) return;
-
-    const data: RelayoutData = {
-      // Keep clear of the edges, which trigger moving to the next screen.
-      heroX: Phaser.Math.Clamp(
-        (getHeroX() / builtWidth) * width,
-        Math.min(EDGE_CLEARANCE, width / 2),
-        Math.max(width - EDGE_CLEARANCE, width / 2),
-      ),
-      relayout: true,
-    };
-    scene.scene.restart(data);
+    rebuild({ width, height, builtWidth });
   };
 
   const onResize = () => {
@@ -51,4 +42,24 @@ export function relayoutOnResize(scene: Phaser.Scene, getHeroX: () => number): v
   });
   // A resize can land while this scene is being rebuilt, when no listener is attached.
   onResize();
+}
+
+/**
+ * Every section screen computes its layout once in create(), so rebuild it at the
+ * new size whenever the window resizes or the device rotates, keeping the hero
+ * at the same relative position.
+ */
+export function relayoutOnResize(scene: Phaser.Scene, getHeroX: () => number): void {
+  onSettledResize(scene, ({ width, builtWidth }) => {
+    const data: RelayoutData = {
+      // Keep clear of the edges, which trigger moving to the next screen.
+      heroX: Phaser.Math.Clamp(
+        (getHeroX() / builtWidth) * width,
+        Math.min(EDGE_CLEARANCE, width / 2),
+        Math.max(width - EDGE_CLEARANCE, width / 2),
+      ),
+      relayout: true,
+    };
+    scene.scene.restart(data);
+  });
 }

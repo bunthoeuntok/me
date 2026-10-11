@@ -9,7 +9,8 @@ const BUBBLE_FONT  = FONT_BODY;
 
 export class ComicUI {
   /**
-   * Draws a full-width caption bar at the top of the canvas.
+   * Draws a full-width caption bar at the top of the screen (fixed while the camera scrolls).
+   * Returns its parts so a caller can replace it.
    * @param bgColor  Phaser integer colour (e.g. COMIC_RED)
    * @param line1    Main label (large)
    * @param line2    Subtitle label (small) — pass '' to omit
@@ -21,18 +22,18 @@ export class ComicUI {
     line1: string,
     line2: string,
     subtitleCss = CSS_YELLOW,
-  ): void {
+  ): Phaser.GameObjects.GameObject[] {
     const { width } = scene.scale;
     const barH = line2 ? 52 : 36;
 
-    const gfx = scene.add.graphics();
+    const gfx = scene.add.graphics().setScrollFactor(0);
     gfx.fillStyle(bgColor);
     gfx.fillRect(0, 0, width, barH);
     gfx.lineStyle(4, COMIC_BLACK, 1);
     gfx.strokeRect(0, 0, width, barH);
     gfx.setDepth(20);
 
-    scene.add
+    const title = scene.add
       .text(width / 2, line2 ? 10 : 10, line1.toUpperCase(), {
         fontFamily: CAPTION_FONT,
         fontSize: '20px',
@@ -40,10 +41,12 @@ export class ComicUI {
         letterSpacing: 3,
       })
       .setOrigin(0.5, 0)
-      .setDepth(21);
+      .setDepth(21)
+      .setScrollFactor(0);
+    const parts: Phaser.GameObjects.GameObject[] = [gfx, title];
 
     if (line2) {
-      scene.add
+      const subtitle = scene.add
         .text(width / 2, 32, line2.toUpperCase(), {
           fontFamily: CAPTION_FONT,
           fontSize: '11px',
@@ -51,8 +54,11 @@ export class ComicUI {
           letterSpacing: 3,
         })
         .setOrigin(0.5, 0)
-        .setDepth(21);
+        .setDepth(21)
+        .setScrollFactor(0);
+      parts.push(subtitle);
     }
+    return parts;
   }
 
   /**
@@ -121,7 +127,7 @@ export class ComicUI {
     const stripH = 28;
     const y = height - stripH;
 
-    const gfx = scene.add.graphics();
+    const gfx = scene.add.graphics().setScrollFactor(0);
     gfx.fillStyle(COMIC_WHITE, 1);
     gfx.fillRect(0, y, width, stripH);
     gfx.lineStyle(3, COMIC_BLACK, 1);
@@ -136,6 +142,7 @@ export class ComicUI {
         letterSpacing: 2,
       })
       .setOrigin(0.5)
-      .setDepth(21);
+      .setDepth(21)
+      .setScrollFactor(0);
   }
 }
