@@ -1,16 +1,12 @@
 import { expect, test } from "@playwright/test";
+import { expectResumeViewWithLatestJob } from "./expectations";
 
 const RESUME_URL = "resume/";
 
 test("Résumé view shows Bunthoeun's name and most recent job", async ({ page }) => {
   await page.goto(RESUME_URL);
 
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Bunthoeun Tok");
-
-  const experience = page.getByRole("region", { name: "Experience" });
-  const latestJob = experience.getByRole("article").first();
-  await expect(latestJob.getByRole("heading")).toContainText("Techbodia");
-  await expect(latestJob).toContainText("Full-stack Developer");
+  await expectResumeViewWithLatestJob(page);
 });
 
 // The game engine alone is over 1 MB of JavaScript; React on its own is ~200 KB.
