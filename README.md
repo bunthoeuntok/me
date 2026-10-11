@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Bunthoeun Tok — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comic-book portfolio you can play: walk a hero through a night-time city to discover
+Bunthoeun's experience, projects and contact details. Recruiters who'd rather not play get a
+plain, printable **Résumé view**, one tap away from anywhere and loading without the game.
 
-Currently, two official plugins are available:
+**Live:** https://bunthoeuntok.github.io/me/ · **Résumé:** https://bunthoeuntok.github.io/me/resume/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+React + TypeScript + Vite shell, [Phaser 3](https://phaser.io) game, Playwright tests,
+deployed to GitHub Pages. Package manager: pnpm.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Run it
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+pnpm install
+pnpm dev            # http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Command | What it does |
+|---|---|
+| `pnpm build` | Typecheck and build to `dist/` |
+| `pnpm build-github` | Build for GitHub Pages (served under `/me/`) |
+| `pnpm lint` | ESLint |
+| `pnpm test:e2e` | Playwright tests against the GitHub Pages build, at desktop and phone sizes |
+| `pnpm export:pdf` | Print the Résumé view to `public/resume.pdf` |
+| `pnpm export:social-preview` | Render the link-preview card to `public/social-preview.png` |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+First time running the tests: `pnpm exec playwright install chromium`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Updating the content
+
+All profile content (jobs, projects, skills, education, contacts…) lives in **one file:
+`src/content.ts`**. The game, the Résumé view and the pages' link-preview text all read from it.
+
+After changing it:
+
+1. `pnpm export:pdf` to regenerate the downloadable PDF.
+2. `pnpm export:social-preview` if the name or title changed.
+3. Commit the content change together with the regenerated files.
+
+## Controls
+
+- **Keyboard:** ← / → walk · ↓ jump · ↑ wall-crawl · I interact · R opens the Résumé view
+- **Touch:** on-screen buttons appear automatically on phones and tablets.
+
+## Deploy
+
+Every push to `main` runs `.github/workflows/deploy.yml`: install, Playwright tests, build,
+publish to GitHub Pages. A failing test blocks the deploy.
+
+## Project docs
+
+- `GLOSSARY.md`: the project's vocabulary (Visitor, Hero, City, District, Landmark…)
+- `docs/adr/`: decisions worth knowing before changing direction
+- The roadmap lives in [GitHub issues](https://github.com/bunthoeuntok/me/issues), starting from the spec in #1.
+
+## Credits
+
+Fonts: [Bangers](https://fonts.google.com/specimen/Bangers) and
+[Comic Neue](https://fonts.google.com/specimen/Comic+Neue), both under the SIL Open Font License,
+bundled via Fontsource.

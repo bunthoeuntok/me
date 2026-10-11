@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:e2e": "playwright test",
-    "export:pdf": "node scripts/export-resume-pdf.ts"
+    "export:pdf": "node scripts/export-resume-pdf.ts",
+    "export:social-preview": "node scripts/export-social-preview.ts"
   },
   "dependencies": {
     "@fontsource/bangers": "^5.3.0",

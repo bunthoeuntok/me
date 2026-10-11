@@ -43,6 +43,8 @@ export interface Contacts {
 }
 
 export interface Profile {
+  /** Where the site is published; link previews need absolute URLs. */
+  siteUrl: string;
   name: string;
   title: string;
   summary: string;
@@ -58,6 +60,7 @@ export interface Profile {
 }
 
 export const profile: Profile = {
+  siteUrl: "https://bunthoeuntok.github.io/me/",
   name: "Bunthoeun Tok",
   title: "Full-Stack Developer",
   summary:
