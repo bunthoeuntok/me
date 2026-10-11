@@ -19,6 +19,22 @@ test("holding move-right walks the hero off the first screen", async ({ page }, 
   await expect(page.locator("canvas")).toBeVisible();
   await expect.poll(() => pixelAt(page, 20, 20)).toEqual(CAPTION_RED);
 
+  // TEMP diagnostic for a CI-only failure: how fast does the browser render here?
+  const fps = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        let frames = 0;
+        const start = performance.now();
+        const tick = () => {
+          frames++;
+          if (performance.now() - start < 2000) requestAnimationFrame(tick);
+          else resolve(frames / ((performance.now() - start) / 1000));
+        };
+        requestAnimationFrame(tick);
+      }),
+  );
+  console.log(`DIAG fps=${fps.toFixed(1)} viewport=${JSON.stringify(page.viewportSize())}`);
+
   const touch = !!testInfo.project.use.hasTouch;
   const finger = touch ? await holdWithFinger(page, page.getByRole("button", { name: "Move right" })) : null;
   if (!touch) await page.keyboard.down("ArrowRight");
